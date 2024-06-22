@@ -1,33 +1,32 @@
-from abc import ABC, abstractmethod 
+from abc import ABC, abstractmethod
 
-class Broker(ABC):
+
+class BrokerInterface(ABC):
 
     @abstractmethod
-    def set(id : str , expired : int) -> bool:
+    def set(self, id: str, value: str, expired: int) -> bool:
         raise NotImplementedError
-    
+
     @abstractmethod
-    def get(id : str) -> str:
+    def get(self, id: str) -> str:
         raise NotImplementedError
-    
+
     @abstractmethod
-    def increase(id : str) -> int:
+    def increase(self, id: str) -> int:
         pass
 
     @abstractmethod
-    def decrease(id : str) -> int:
+    def decrease(self, id: str) -> int:
         pass
-    
+
     @abstractmethod
-    def delete(id : str) -> bool:
+    def delete(self, id: str) -> bool:
         raise NotImplementedError
-    
+
     @abstractmethod
-    def publish(id : str , payload : str):
+    def publish(self, id: str, payload: str):
         pass
 
     @abstractmethod
-    def subscribe(id : str) -> str:
+    def subscribe(self, id: str) -> str:
         pass
-    
-

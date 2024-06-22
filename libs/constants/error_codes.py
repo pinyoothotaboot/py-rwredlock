@@ -1,0 +1,1 @@
+ERROR_CONNECTION: int = 100
