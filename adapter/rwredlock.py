@@ -1,5 +1,3 @@
-import uuid
-import json
 from libs.utility import get_time, sleep
 from interface.rwlock import RWLockInterface
 from interface.broker import BrokerInterface
@@ -126,6 +124,9 @@ class RWRedlock(RWLockInterface):
         writer_active: str = self._broker.get(writer)
         while (num_readers_active and int(num_readers_active) > 0) or writer_active:
             if get_time() > end:
+                while self._broker.delete(writer_icr):
+                    break
+
                 # Unlock g.
                 while self._broker.delete(lock_id):
                     break
@@ -133,9 +134,7 @@ class RWRedlock(RWLockInterface):
             sleep(0.01)
 
         # Decrement num_writers_waiting
-        num_writers_waiting = self._broker.decrease(writer_icr)
-        while num_writers_waiting and int(num_writers_waiting) > 0:
-            num_writers_waiting = self._broker.decrease(writer_icr)
+        self._broker.delete(writer_icr)
 
         # Set writer_active to true
         while self._broker.set(writer, "1", lock_timeout):
