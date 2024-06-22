@@ -1,7 +1,14 @@
+import logging
+import logging.config
+from configs.logging_setting import LOGGING
+logging.config.dictConfig(LOGGING)
+
 from libs.utility import get_time, sleep
 from interface.rwlock import RWLockInterface
 from interface.broker import BrokerInterface
 from configs.config import RWLOCK_READER, RWLOCK_WRITER, RWLOCK_TIMEOUT, RWLOCK_TTL
+
+logger = logging.getLogger(__name__)
 
 """
     Implement ref : https://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock
@@ -178,16 +185,26 @@ class RWRedlock(RWLockInterface):
         return False
 
     def lock(self, lock_id: str, mode: str, ttl: int, lock_timeout: int) -> bool:
-        print(f"[{mode}] - Get lock id : {lock_id}")
         if mode == self.READ:
-            return self.__lock_read(lock_id, ttl, lock_timeout)
-        return self.__lock_write(lock_id, ttl, lock_timeout)
+            acquire = self.__lock_read(lock_id, ttl, lock_timeout)
+            if acquire:
+                logger.info(f"[{mode}] - Acquired lock id : {lock_id}")
+            return acquire
+        acquire = self.__lock_write(lock_id, ttl, lock_timeout)
+        if acquire:
+            logger.info(f"[{mode}] - Acquired lock id : {lock_id}")
+        return acquire
 
     def unlock(self, lock_id: str, mode: str, lock_timeout: int) -> bool:
-        print(f"[{mode}] - Release lock id : {lock_id}")
         if mode == self.READ:
-            return self.__unlock_read(lock_id, lock_timeout)
-        return self.__unlock_write(lock_id, lock_timeout)
+            release = self.__unlock_read(lock_id, lock_timeout)
+            if release:
+                logger.info(f"[{mode}] - Release lock id : {lock_id}")
+            return release
+        release =  self.__unlock_write(lock_id, lock_timeout)
+        if release:
+            logger.info(f"[{mode}] - Release lock id : {lock_id}")
+        return release
 
     def locked(self, lock_id: str) -> bool:
         writer: str = self.__get_write_lock_id(lock_id)
