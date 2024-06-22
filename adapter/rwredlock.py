@@ -53,7 +53,7 @@ class RWRedlock(RWLockInterface):
             writer_active: str = self._broker.get(writer)
             num_writers_waiting: str = self._broker.get(writer_icr)
 
-            sleep(0.001)
+            sleep(0.01)
 
         # Increment num_readers_active
         num_readers_active: str = self._broker.get(reader_icr)
@@ -130,7 +130,7 @@ class RWRedlock(RWLockInterface):
                 while self._broker.delete(lock_id):
                     break
                 return False
-            sleep(0.001)
+            sleep(0.01)
 
         # Decrement num_writers_waiting
         num_writers_waiting = self._broker.decrease(writer_icr)
