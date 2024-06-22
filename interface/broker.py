@@ -24,7 +24,7 @@ class BrokerInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def publish(self, id: str, payload: str):
+    def publish(self, id: str, payload: str) -> bool:
         pass
 
     @abstractmethod
