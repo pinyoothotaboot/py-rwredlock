@@ -1,4 +1,3 @@
-import json
 from redis import Redis
 from libs.utility import get_time, sleep
 from interface.broker import BrokerInterface

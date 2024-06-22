@@ -81,6 +81,40 @@ if rwlock.lock(lock_id, rwlock.WRITE, ttl, RWLOCK_TIMEOUT):
 rwlock.unlock(lock_id, rwlock.WRITE, RWLOCK_TIMEOUT)
 ```
 
+## Benchmark
+Installation benchmark tool [hyperfine](https://github.com/sharkdp/hyperfine)
+
+```sh
+sudo apt install hyperfine
+```
+
+Run benchmark test
+
+```sh
+hyperfine "python bench_reader_lock.py" "python bench_writer_lock.py" "python bench_reader_writer_lock.py"
+```
+
+Benckmark reports
+
+```sh
+Benchmark 1: python bench_reader_lock.py
+  Time (mean ± σ):      68.3 ms ±   1.8 ms    [User: 60.9 ms, System: 6.8 ms]
+  Range (min … max):    65.5 ms …  73.1 ms    40 runs
+
+Benchmark 2: python bench_writer_lock.py
+  Time (mean ± σ):      69.2 ms ±   1.4 ms    [User: 60.0 ms, System: 8.0 ms]
+  Range (min … max):    67.1 ms …  72.7 ms    42 runs
+
+Benchmark 3: python bench_reader_writer_lock.py
+  Time (mean ± σ):      68.9 ms ±   1.7 ms    [User: 61.8 ms, System: 5.9 ms]
+  Range (min … max):    65.9 ms …  73.8 ms    42 runs
+
+Summary
+  'python bench_reader_lock.py' ran
+    1.01 ± 0.04 times faster than 'python bench_reader_writer_lock.py'
+    1.01 ± 0.03 times faster than 'python bench_writer_lock.py'
+```
+
 ## Incomming
 
 - Benchmarks
