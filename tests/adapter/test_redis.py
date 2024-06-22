@@ -121,7 +121,7 @@ class TestRedis(unittest.TestCase):
 
     def test_subscribe_with_empty_id_failed(self):
         with self.assertRaises(EmptyStringException) as cm:
-            message = self._broker.subscribe("")
+            message = self._broker.subscribe("", 5)
         the_exception = cm.exception
         self.assertEqual(the_exception.code, ERROR_EMPTY_STRING)
         self.assertEqual(the_exception.message, "The id is empty")
