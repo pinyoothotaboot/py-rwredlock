@@ -1,6 +1,6 @@
 import json
 from redis import Redis
-from libs.utility import get_time,sleep
+from libs.utility import get_time, sleep
 from interface.broker import BrokerInterface
 from infrastructure.redis import create_connection
 from libs.exceptions.connect_exception import ConnectionException
@@ -55,17 +55,17 @@ class Broker(BrokerInterface):
 
         return self._conn.publish(id, payload) > -1
 
-    def subscribe(self, id: str,ttl : int) -> str:
+    def subscribe(self, id: str, ttl: int) -> str:
         self.__empty_id(id)
         sub = self._conn.pubsub()
         sub.subscribe(id)
-        
+
         if ttl < 0:
             for message in sub.listen():
                 if message.get("type") == "message":
                     resp = message.get("data")
                     return str(resp, "UTF-8") if resp is not None else ""
-        
+
         end = get_time(ttl)
         message = None
         while get_time() < end:
@@ -79,4 +79,3 @@ class Broker(BrokerInterface):
             resp = message.get("data")
             return str(resp, "UTF-8") if resp is not None else ""
         return ""
-
