@@ -28,5 +28,5 @@ class BrokerInterface(ABC):
         pass
 
     @abstractmethod
-    def subscribe(self, id: str) -> str:
+    def subscribe(self, id: str,ttl : int) -> str:
         pass

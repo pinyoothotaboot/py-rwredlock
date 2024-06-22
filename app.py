@@ -1,22 +1,32 @@
-from configs.config import REDIS_HOST, REDIS_PORT
-from libs.exceptions.connect_exception import ConnectionException
+import sys
+import uuid
+from configs.config import RWLOCK_TIMEOUT
 from adapter.redis import Broker
+from adapter.rwredlock import RWRedlock
+from libs.utility import sleep
 
-print("REDIS HOST", REDIS_HOST)
-print("REDIS PORT", REDIS_PORT)
+if __name__ == "__main__":
+    try:
+        lock_id : str = str(uuid.uuid4())
+        ttl = 5
+        broker = Broker()
+        rwlock = RWRedlock(broker)
+        
+        if rwlock.lock(lock_id,rwlock.WRITE,ttl,RWLOCK_TIMEOUT):
+            print("TO DO WRITE",rwlock.locked(lock_id))
+            sleep(10)
+        rwlock.unlock(lock_id,rwlock.WRITE,RWLOCK_TIMEOUT)
+        print("LOCKED",rwlock.locked(lock_id))
 
-ID = "1234"
-broker = Broker()
-broker.set(ID, "Hello Wolrd", 10)
-resp = broker.get(ID)
-print("OK ", resp)
-res = broker.get("12345")
-print("FAILED ", res)
+        if rwlock.lock(lock_id,rwlock.READ,ttl,RWLOCK_TIMEOUT):
+            print("TO DO READ",rwlock.locked(lock_id))
+            sleep(10)
+        rwlock.unlock(lock_id,rwlock.READ,RWLOCK_TIMEOUT)
+        print("LOCKED",rwlock.locked(lock_id))
 
-print("INC ", broker.increase(f"COUNT:{ID}"))
+        msg = rwlock.waitforunlock(lock_id)
+        print(msg)
 
-print("PUB ", broker.publish(ID, "HELLO PUBLISH"))
-
-print("SUB", broker.subscribe(ID))
-
-print("DEL ", broker.delete(ID))
+    except KeyboardInterrupt:
+        print("Exit program..")
+        sys.exit()

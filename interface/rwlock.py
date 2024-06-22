@@ -16,5 +16,5 @@ class RWLockInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def waitforunlock(self, lock_id: str) -> bool:
+    def waitforunlock(self, lock_id: str,ttl : int) -> bool:
         raise NotImplementedError

@@ -23,6 +23,6 @@ RWLOCK_WRITER: str = (
 RWLOCK_TIMEOUT: int = (
     int(os.getenv("RWLOCK_TIMEOUT")) if os.getenv("RWLOCK_TIMEOUT") else 10
 )  # Sec
-RWLOCK_EXPIRED: int = (
-    int(os.getenv("RWLOCK_EXPIRED")) if os.getenv("RWLOCK_EXPIRED") else 10
+RWLOCK_TTL: int = (
+    int(os.getenv("RWLOCK_TTL")) if os.getenv("RWLOCK_TTL") else 10
 )  # Sec
