@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.10.12"
+install: "pip install -r requirements.txt"
+before_script:
+  - cp .env-dist .env
+script:
+  - flake8 cmdbox
+after_success:
+  - coveralls
