@@ -26,6 +26,6 @@ RWLOCK_TIMEOUT: int = (
 RWLOCK_TTL: int = int(os.getenv("RWLOCK_TTL")) if os.getenv("RWLOCK_TTL") else 10  # Sec
 
 # Load Locking config from env
-LOCK_NAME : str = os.getenv("LOCK_NAME") if os.getenv("LOCK_NAME") else "lock"
-LOCK_TIMEOUT : int = int(os.getenv("LOCK_TIMEOUT")) if os.getenv("LOCK_TIMEOUT") else 10
-LOCK_TTL : int = int(os.getenv("LOCK_TTL")) if os.getenv("LOCK_TTL") else 10
+LOCK_NAME: str = os.getenv("LOCK_NAME") if os.getenv("LOCK_NAME") else "lock"
+LOCK_TIMEOUT: int = int(os.getenv("LOCK_TIMEOUT")) if os.getenv("LOCK_TIMEOUT") else 10
+LOCK_TTL: int = int(os.getenv("LOCK_TTL")) if os.getenv("LOCK_TTL") else 10

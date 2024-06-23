@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from redis import Redis
 
+
 class BrokerInterface(ABC):
 
     @abstractmethod

@@ -7,7 +7,13 @@ logging.config.dictConfig(LOGGING)
 from libs.utility import get_time, sleep
 from interface.rwlock import LockInterface
 from interface.broker import BrokerInterface
-from configs.config import RWLOCK_READER, RWLOCK_WRITER, RWLOCK_TIMEOUT, RWLOCK_TTL,RWLOCK_NAME
+from configs.config import (
+    RWLOCK_READER,
+    RWLOCK_WRITER,
+    RWLOCK_TIMEOUT,
+    RWLOCK_TTL,
+    RWLOCK_NAME,
+)
 
 logger = logging.getLogger(__name__)
 
