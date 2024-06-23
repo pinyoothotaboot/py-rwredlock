@@ -69,7 +69,7 @@ OK
 black .
 ```
 
-## Example
+## Usage
 
 ```py
 import uuid
@@ -87,6 +87,14 @@ if rwlock.lock(lock_id, rwlock.WRITE,identifier, ttl, RWLOCK_TIMEOUT):
     # Do Something
     
 rwlock.unlock(lock_id, rwlock.WRITE,identifier, RWLOCK_TIMEOUT)
+```
+
+## Examples
+
+Run example
+
+```sh
+python examples/sumation_number_with_multiprocessing.py
 ```
 
 ## Benchmark
