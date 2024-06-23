@@ -109,7 +109,9 @@ class RWRedlock(LockInterface):
 
         return False
 
-    def __lock_write(self, lock_id: str, ttl: int, lock_timeout: int) -> bool:
+    def __lock_write(
+        self, lock_id: str, identifier: str, ttl: int, lock_timeout: int
+    ) -> bool:
         lock_timeout: int = lock_timeout if lock_timeout > 0 else RWLOCK_TIMEOUT
         ttl: int = ttl if ttl > 0 else RWLOCK_TTL
         end = get_time(ttl)
@@ -151,7 +153,7 @@ class RWRedlock(LockInterface):
         self._broker.delete(writer_icr)
 
         # Set writer_active to true
-        while self._broker.set(writer, "1", lock_timeout):
+        while self._broker.set(writer, identifier, lock_timeout):
             flag_writer = True
             break
 
@@ -161,7 +163,7 @@ class RWRedlock(LockInterface):
 
         return flag_writer
 
-    def __unlock_write(self, lock_id: str, lock_timeout: int) -> bool:
+    def __unlock_write(self, lock_id: str, identifier: str, lock_timeout: int) -> bool:
         writer: str = self.__get_write_lock_id(lock_id)
         reader: str = self.__get_read_lock_id(lock_id)
 
@@ -173,6 +175,17 @@ class RWRedlock(LockInterface):
             break
 
         # Clear all reader and write id
+        while True:
+            resp = self._broker.get(writer)
+            if resp != identifier:
+                # Unlock g
+                while self._broker.delete(lock_id):
+                    return False
+            else:
+                break
+
+            sleep(0.01)
+
         while self._broker.delete(writer):
             break
 
@@ -204,13 +217,15 @@ class RWRedlock(LockInterface):
             - acquire (boolean) : Status request acquire distribute locking
     """
 
-    def lock(self, lock_id: str, mode: str, ttl: int, lock_timeout: int) -> bool:
+    def lock(
+        self, lock_id: str, mode: str, identifier: str, ttl: int, lock_timeout: int
+    ) -> bool:
         if mode == self.READ:
             acquire = self.__lock_read(lock_id, ttl, lock_timeout)
             if acquire:
                 logger.info(f"[{mode}] - Acquired lock id : {lock_id}")
             return acquire
-        acquire = self.__lock_write(lock_id, ttl, lock_timeout)
+        acquire = self.__lock_write(lock_id, identifier, ttl, lock_timeout)
         if acquire:
             logger.info(f"[{mode}] - Acquired lock id : {lock_id}")
         return acquire
@@ -227,13 +242,15 @@ class RWRedlock(LockInterface):
             - release (boolean) : Status request release acquired distribute locking
     """
 
-    def unlock(self, lock_id: str, mode: str, lock_timeout: int) -> bool:
+    def unlock(
+        self, lock_id: str, mode: str, identifier: str, lock_timeout: int
+    ) -> bool:
         if mode == self.READ:
             release = self.__unlock_read(lock_id, lock_timeout)
             if release:
                 logger.info(f"[{mode}] - Release lock id : {lock_id}")
             return release
-        release = self.__unlock_write(lock_id, lock_timeout)
+        release = self.__unlock_write(lock_id, identifier, lock_timeout)
         if release:
             logger.info(f"[{mode}] - Release lock id : {lock_id}")
         return release

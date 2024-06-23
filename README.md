@@ -79,13 +79,14 @@ from adapter.rwredlock import RWRedlock
 
 lock_id: str = str(uuid.uuid4())
 ttl = 5
+identifier: str = str(uuid.uuid4())
 broker = Broker()
 rwlock = RWRedlock(broker)
 
-if rwlock.lock(lock_id, rwlock.WRITE, ttl, RWLOCK_TIMEOUT):
+if rwlock.lock(lock_id, rwlock.WRITE,identifier, ttl, RWLOCK_TIMEOUT):
     # Do Something
     
-rwlock.unlock(lock_id, rwlock.WRITE, RWLOCK_TIMEOUT)
+rwlock.unlock(lock_id, rwlock.WRITE,identifier, RWLOCK_TIMEOUT)
 ```
 
 ## Benchmark
@@ -98,7 +99,7 @@ sudo apt install hyperfine
 Run benchmark test
 
 ```sh
-hyperfine "python bench_reader_lock.py" "python bench_writer_lock.py" "python bench_reader_writer_lock.py"
+hyperfine "python bench_reader_lock.py" "python bench_writer_lock.py" "python bench_reader_writer_lock.py" --show-output
 ```
 
 Benckmark reports

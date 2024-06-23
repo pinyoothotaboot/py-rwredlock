@@ -10,13 +10,14 @@ from configs.config import RWLOCK_TIMEOUT
 
 
 def benchmark_write_lock():
+    identifier: str = str(uuid.uuid4())
     lock_id = str(uuid.uuid4())
     broker = Broker()
     rwlock = RWRedlock(broker)
 
     for idx in range(1000):
         rwlock.waitforunlock(lock_id)
-        if rwlock.lock(lock_id, rwlock.WRITE, 10, RWLOCK_TIMEOUT):
+        if rwlock.lock(lock_id, rwlock.WRITE, identifier, 10, RWLOCK_TIMEOUT):
             resp = broker.increase(lock_id)
             assert resp == idx, "Not matched"
-            rwlock.unlock(lock_id, rwlock.WRITE, RWLOCK_TIMEOUT)
+            rwlock.unlock(lock_id, rwlock.WRITE, identifier, RWLOCK_TIMEOUT)
