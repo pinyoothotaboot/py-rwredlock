@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class RWLockInterface(ABC):
+class LockInterface(ABC):
 
     @abstractmethod
     def lock(self, lock_id: str, mode: str, ttl: int, lock_timeout: int) -> bool:

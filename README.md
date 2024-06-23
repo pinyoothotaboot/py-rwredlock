@@ -8,6 +8,7 @@ This project created for implement redis with RWLocking.The project create conce
 ## Features
 
 - RWRedlock : The readers and writer locking implement in distribute architecture (default use redis)
+- Redlock : The distribute mutex locking implement with locking architecture (default redis) 
 
 ## Installation
 
@@ -123,8 +124,6 @@ Summary
 
 ## Incomming
 
-- Benchmarks
-- Distribute mutex lock (Redlock) , One write , one read key
 - Support other broker , MongoDb , Postgres etc.
 - Optimizations
 
