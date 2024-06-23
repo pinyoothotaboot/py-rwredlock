@@ -77,9 +77,8 @@ class Redlock(LockInterface):
 
     def locked(self, lock_id: str) -> bool:
         lock_id = self.__get__lock_id(lock_id)
-        while self._broker.get(lock_id):
-            return True
-        return False
+        resp = self._broker.get(lock_id)
+        return True if resp else False
 
     def waitforunlock(self, lock_id: str, ttl: int) -> bool:
         flag: bool = True
@@ -96,5 +95,4 @@ class Redlock(LockInterface):
                 return flag
 
             sleep(0.1)
-
         return flag
