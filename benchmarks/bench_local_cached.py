@@ -1,5 +1,6 @@
 import uuid
 
+
 def benchmark_get_from_local_cached():
     message = "HELLO WORLD"
     lock_id = str(uuid.uuid4())
@@ -16,7 +17,3 @@ def benchmark_set_to_local_cached():
     cached = {}
     for idx in range(1000):
         cached[idx] = message
-
-
-
-
