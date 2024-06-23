@@ -94,5 +94,6 @@ class TestRWRedlock(unittest.TestCase):
         self.assertEqual(unlock, False)
         self.assertEqual(int(int(stop - start) - self._ttl), self._ttl)
 
+
 if __name__ == "__main__":
     unittest.main()
