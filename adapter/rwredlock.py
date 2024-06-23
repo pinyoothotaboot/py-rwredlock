@@ -294,7 +294,7 @@ class RWRedlock(LockInterface):
             flag = self.locked(lock_id)
             if not flag:
                 return flag
-            
+
             sleep(0.1)
 
         return flag
