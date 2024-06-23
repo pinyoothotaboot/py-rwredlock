@@ -90,7 +90,7 @@ class Redlock(LockInterface):
             return flag
 
         end = get_time(ttl)
-        while (get_time() < end) or flag:
+        while (get_time() < end) and flag:
             flag = self.locked(lock_id)
             sleep(0.1)
 
