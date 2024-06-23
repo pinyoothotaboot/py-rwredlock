@@ -7,7 +7,7 @@ logging.config.dictConfig(LOGGING)
 from libs.utility import get_time, sleep
 from interface.rwlock import RWLockInterface
 from interface.broker import BrokerInterface
-from configs.config import RWLOCK_READER, RWLOCK_WRITER, RWLOCK_TIMEOUT, RWLOCK_TTL
+from configs.config import RWLOCK_READER, RWLOCK_WRITER, RWLOCK_TIMEOUT, RWLOCK_TTL,RWLOCK_NAME
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +25,10 @@ class RWRedlock(RWLockInterface):
         self._broker = broker
 
     def __get_write_lock_id(self, lock_id: str) -> str:
-        return f"lock:{self.WRITE}:{lock_id}"
+        return f"{RWLOCK_NAME}:{self.WRITE}:{lock_id}"
 
     def __get_read_lock_id(self, lock_id: str) -> str:
-        return f"lock:{self.READ}:{lock_id}"
+        return f"{RWLOCK_NAME}:{self.READ}:{lock_id}"
 
     def __lock_read(self, lock_id: str, ttl: int, lock_timeout: int) -> bool:
         lock_timeout: int = lock_timeout if lock_timeout > 0 else RWLOCK_TIMEOUT
