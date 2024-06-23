@@ -62,6 +62,12 @@ Ran 21 tests in 20.161s
 OK
 ```
 
+## Run format code
+
+```sh
+black .
+```
+
 ## Example
 
 ```py

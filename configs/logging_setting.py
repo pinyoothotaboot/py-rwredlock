@@ -29,10 +29,9 @@ LOGGING = {
     },
     "loggers": {
         "": {
-            "handlers": ["console","default"],
+            "handlers": ["console", "default"],
             "level": "DEBUG",
             "propagate": True,
         },
     },
 }
-

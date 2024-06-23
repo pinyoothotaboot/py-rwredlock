@@ -14,14 +14,22 @@ if __name__ == "__main__":
 
         if rwlock.lock(lock_id, rwlock.WRITE, ttl, RWLOCK_TIMEOUT):
             print("TO DO WRITE", rwlock.locked(lock_id))
-            print("GET READ",rwlock.lock(lock_id, rwlock.READ, ttl, RWLOCK_TIMEOUT),rwlock.locked(lock_id))
+            print(
+                "GET READ",
+                rwlock.lock(lock_id, rwlock.READ, ttl, RWLOCK_TIMEOUT),
+                rwlock.locked(lock_id),
+            )
             sleep(10)
         rwlock.unlock(lock_id, rwlock.WRITE, RWLOCK_TIMEOUT)
         print("LOCKED", rwlock.locked(lock_id))
 
         if rwlock.lock(lock_id, rwlock.READ, ttl, RWLOCK_TIMEOUT):
             print("TO DO READ", rwlock.locked(lock_id))
-            print("GET WRITE ",rwlock.lock(lock_id, rwlock.WRITE, ttl, RWLOCK_TIMEOUT),rwlock.locked(lock_id))
+            print(
+                "GET WRITE ",
+                rwlock.lock(lock_id, rwlock.WRITE, ttl, RWLOCK_TIMEOUT),
+                rwlock.locked(lock_id),
+            )
             sleep(10)
         rwlock.unlock(lock_id, rwlock.READ, RWLOCK_TIMEOUT)
         print("LOCKED", rwlock.locked(lock_id))
