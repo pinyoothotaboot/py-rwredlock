@@ -20,7 +20,7 @@ def benchmark_read_lock():
 
     for _ in range(1000):
         rwlock.waitforunlock(lock_id)
-        if rwlock.lock(lock_id, rwlock.READ,identifier, 10, RWLOCK_TIMEOUT):
+        if rwlock.lock(lock_id, rwlock.READ, identifier, 10, RWLOCK_TIMEOUT):
             resp = broker.get(lock_id)
             assert resp == message, "Not matched"
-            rwlock.unlock(lock_id, rwlock.READ,identifier, RWLOCK_TIMEOUT)
+            rwlock.unlock(lock_id, rwlock.READ, identifier, RWLOCK_TIMEOUT)

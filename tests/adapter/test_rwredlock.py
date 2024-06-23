@@ -21,21 +21,23 @@ class TestRWRedlock(unittest.TestCase):
     def test_reader_lock_with_data_passed(self):
         identifier: str = str(uuid.uuid4())
         read_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.READ,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.READ, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         locked = self._rwredlock.locked(self._lock_id)
-        self._rwredlock.unlock(self._lock_id, self._rwredlock.READ,identifier, RWLOCK_TIMEOUT)
+        self._rwredlock.unlock(
+            self._lock_id, self._rwredlock.READ, identifier, RWLOCK_TIMEOUT
+        )
         self.assertEqual(read_lock, True)
         self.assertEqual(locked, False)  # Reader lock already access every
 
     def test_reader_unlock_with_data_passed(self):
         identifier: str = str(uuid.uuid4())
         read_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.READ,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.READ, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         locked = self._rwredlock.locked(self._lock_id)
         read_unlock = self._rwredlock.unlock(
-            self._lock_id, self._rwredlock.READ,identifier, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.READ, identifier, RWLOCK_TIMEOUT
         )
         self.assertEqual(read_lock, True)
         self.assertEqual(locked, False)  # Reader lock already access every
@@ -44,21 +46,23 @@ class TestRWRedlock(unittest.TestCase):
     def test_writer_lock_with_data_passed(self):
         identifier: str = str(uuid.uuid4())
         write_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.WRITE,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.WRITE, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         locked = self._rwredlock.locked(self._lock_id)
-        self._rwredlock.unlock(self._lock_id, self._rwredlock.WRITE,identifier, RWLOCK_TIMEOUT)
+        self._rwredlock.unlock(
+            self._lock_id, self._rwredlock.WRITE, identifier, RWLOCK_TIMEOUT
+        )
         self.assertEqual(write_lock, True)
         self.assertEqual(locked, True)
 
     def test_writer_unlock_with_data_passed(self):
         identifier: str = str(uuid.uuid4())
         write_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.WRITE,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.WRITE, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         locked_lock = self._rwredlock.locked(self._lock_id)
         write_unlock = self._rwredlock.unlock(
-            self._lock_id, self._rwredlock.WRITE,identifier, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.WRITE, identifier, RWLOCK_TIMEOUT
         )
         locked_unlock = self._rwredlock.locked(self._lock_id)
         self.assertEqual(write_lock, True)
@@ -69,7 +73,7 @@ class TestRWRedlock(unittest.TestCase):
     def test_writer_lock_with_timeout_passed(self):
         identifier: str = str(uuid.uuid4())
         write_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.WRITE,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.WRITE, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         locked_lock = self._rwredlock.locked(self._lock_id)
         sleep(self._ttl * 2)
@@ -82,7 +86,7 @@ class TestRWRedlock(unittest.TestCase):
         identifier: str = str(uuid.uuid4())
         start = get_time()
         write_lock = self._rwredlock.lock(
-            self._lock_id, self._rwredlock.WRITE,identifier, self._ttl, RWLOCK_TIMEOUT
+            self._lock_id, self._rwredlock.WRITE, identifier, self._ttl, RWLOCK_TIMEOUT
         )
         unlock = self._rwredlock.waitforunlock(self._lock_id)
         stop = get_time()

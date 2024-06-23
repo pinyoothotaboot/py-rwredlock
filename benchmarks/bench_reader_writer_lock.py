@@ -17,14 +17,14 @@ def benchmark_write_read_lock():
 
     for idx in range(1000):
 
-        if rwlock.lock(lock_id, rwlock.WRITE,identifier, 10, RWLOCK_TIMEOUT):
+        if rwlock.lock(lock_id, rwlock.WRITE, identifier, 10, RWLOCK_TIMEOUT):
             resp = broker.increase(lock_id)
             assert resp == idx, "Not matched"
-            rwlock.unlock(lock_id, rwlock.WRITE,identifier, RWLOCK_TIMEOUT)
+            rwlock.unlock(lock_id, rwlock.WRITE, identifier, RWLOCK_TIMEOUT)
 
         rwlock.waitforunlock(lock_id)
 
-        if rwlock.lock(lock_id, rwlock.READ,identifier, 10, RWLOCK_TIMEOUT):
+        if rwlock.lock(lock_id, rwlock.READ, identifier, 10, RWLOCK_TIMEOUT):
             resp = broker.get(lock_id)
             assert int(resp) == idx, "Not matched"
-            rwlock.unlock(lock_id, rwlock.READ,identifier, RWLOCK_TIMEOUT)
+            rwlock.unlock(lock_id, rwlock.READ, identifier, RWLOCK_TIMEOUT)

@@ -17,7 +17,7 @@ def benchmark_write_lock():
 
     for idx in range(1000):
         rwlock.waitforunlock(lock_id)
-        if rwlock.lock(lock_id, rwlock.WRITE,identifier, 10, RWLOCK_TIMEOUT):
+        if rwlock.lock(lock_id, rwlock.WRITE, identifier, 10, RWLOCK_TIMEOUT):
             resp = broker.increase(lock_id)
             assert resp == idx, "Not matched"
-            rwlock.unlock(lock_id, rwlock.WRITE,identifier, RWLOCK_TIMEOUT)
+            rwlock.unlock(lock_id, rwlock.WRITE, identifier, RWLOCK_TIMEOUT)
