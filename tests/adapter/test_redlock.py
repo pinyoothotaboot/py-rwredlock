@@ -84,8 +84,11 @@ class TestRedlock(unittest.TestCase):
         write_lock = self._redlock.lock(
             self._lock_id, identifier, self._ttl, LOCK_TIMEOUT
         )
-        unlock = self._redlock.waitforunlock(self._lock_id, self._ttl)
+        unlock = self._redlock.waitforunlock(self._lock_id, self._ttl + LOCK_TIMEOUT)
         stop = get_time()
         self.assertEqual(write_lock, True)
         self.assertEqual(unlock, False)
         self.assertEqual(int(int(stop - start) - self._ttl), self._ttl)
+
+if __name__ == "__main__":
+    unittest.main()
