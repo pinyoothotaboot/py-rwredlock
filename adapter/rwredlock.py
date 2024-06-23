@@ -1,6 +1,7 @@
 import logging
 import logging.config
 from configs.logging_setting import LOGGING
+
 logging.config.dictConfig(LOGGING)
 
 from libs.utility import get_time, sleep
@@ -165,7 +166,7 @@ class RWRedlock(RWLockInterface):
         while self._broker.set(lock_id, writer, lock_timeout):
             break
 
-        # Set writer_active to false
+        # Clear all reader and write id
         while self._broker.delete(writer):
             break
 
@@ -184,6 +185,19 @@ class RWRedlock(RWLockInterface):
 
         return False
 
+    """
+        Function : lock
+        @sync
+        About : Request acquire distribute RWLocking
+        Param :
+            - lock_id (string) : The identifie key to acquire distribute locking
+            - mode (string) : Mode request acquire READ / WRITE
+            - ttl (integer) : Time to live request acquire distribute locking
+            - lock_timeout (integer) : The timeout of set in lock
+        Return :
+            - acquire (boolean) : Status request acquire distribute locking
+    """
+
     def lock(self, lock_id: str, mode: str, ttl: int, lock_timeout: int) -> bool:
         if mode == self.READ:
             acquire = self.__lock_read(lock_id, ttl, lock_timeout)
@@ -195,21 +209,54 @@ class RWRedlock(RWLockInterface):
             logger.info(f"[{mode}] - Acquired lock id : {lock_id}")
         return acquire
 
+    """
+        Function : unlock
+        @sync
+        About : Request release acquired distribute locking
+        Param :
+            - lock_id (string) : The identifie key to acquire distribute locking
+            - mode (string) : Mode request acquire READ / WRITE
+            - lock_timeout (integer) : The timeout of set in lock
+        Return :
+            - release (boolean) : Status request release acquired distribute locking
+    """
+
     def unlock(self, lock_id: str, mode: str, lock_timeout: int) -> bool:
         if mode == self.READ:
             release = self.__unlock_read(lock_id, lock_timeout)
             if release:
                 logger.info(f"[{mode}] - Release lock id : {lock_id}")
             return release
-        release =  self.__unlock_write(lock_id, lock_timeout)
+        release = self.__unlock_write(lock_id, lock_timeout)
         if release:
             logger.info(f"[{mode}] - Release lock id : {lock_id}")
         return release
+
+    """
+        Function : locked
+        @sync
+        About : Check status read or write locking 
+        Param :
+            - lock_id (string) : The identifie key to acquire distribute locking
+        Return :
+            - (boolean) : The status READ / WRITE locking
+    """
 
     def locked(self, lock_id: str) -> bool:
         writer: str = self.__get_write_lock_id(lock_id)
         resp_write: str = self._broker.get(writer)
         return True if resp_write else False
+
+    """
+        Function : waitforunlock
+        @sync
+        About : Waiting for current locking release
+        Param :
+            - lock_id (string) : The identifie key to acquire distribute locking
+            - ttl (integer) : Time to live request acquire distribute locking
+        Return :
+            - flag (boolean) : The flag status of READ / WRITE locking 
+    """
 
     def waitforunlock(self, lock_id: str, ttl: int = -1) -> bool:
         flag: bool = True
