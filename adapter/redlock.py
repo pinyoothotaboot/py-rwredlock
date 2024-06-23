@@ -12,7 +12,7 @@ from configs.config import LOCK_TIMEOUT, LOCK_TTL, LOCK_NAME
 logger = logging.getLogger(__name__)
 
 
-class RWRedlock(LockInterface):
+class Redlock(LockInterface):
     _broker: BrokerInterface
 
     def __init__(self, broker: BrokerInterface) -> None:
